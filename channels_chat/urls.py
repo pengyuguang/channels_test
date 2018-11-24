@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from chat import views as chat_view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^new/$', chat_view.new_room, name='new_room'),
+    url(r'^(?P<label>[\w-]{,50})/$', chat_view.chat_room, name='chat_room'),
 ]
