@@ -1,0 +1,10 @@
+*.pyc
+*.pyo
+migrations*
+upload*
+media*
+.DS_Store
+.project
+.pydevproject
+*.log
+.idea
