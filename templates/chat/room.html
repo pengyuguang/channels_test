@@ -38,4 +38,29 @@
   <script type="text/javascript" src='{% static "jquery-1.12.1.min.js" %}'></script>
   <script type="text/javascript" src='{% static "reconnecting-websocket.min.js" %}'></script>
 {#  <script type="text/javascript" src='{% static "chat.js" %}'></script>#}
+  <script type="application/javascript">
+    var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+    var chat_socket = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + "/chat" + window.location.pathname);
+
+    //提交表单时候，用WebSocket替代POST发送数据
+    $('#chatform').on('submit', function(event) {
+        var message = {
+            handle: $('#handle').val(),
+            message: $('#message').val(),
+        }
+        chat_socket.send(JSON.stringify(message)); //WebSocket发送数据
+        return false;
+    });
+
+    // 将回调函数与WebSocket上的新数据接收事件对接起来
+    chat_socket.onmessage = function(message) {
+    var data = JSON.parse(message.data);
+        $('#chat').append('<tr>'
+            + '<td>' + data.timestamp + '</td>'
+            + '<td>' + data.handle + '</td>'
+            + '<td>' + data.message + ' </td>'
+        + '</tr>');
+    };
+
+  </script>
 {% endblock afterbody %}
